@@ -1,80 +1,49 @@
 // ========== POEMAS ==========
-
 const poemas = [
-  `Como la Princesa Luna,
-aprendiste a amar en silencio,
-a cuidar sueños ajenos
-mientras escondes los tuyos.
-La noche te entiende,
-porque tu corazón brilla
-sin pedirle permiso al sol.
-Amarte sería caminar despacio
-para no despertar la magia
-que vive en ti.`,
+  `Como la Princesa Luna,  
+aprendiste a amar en calma,  
+y tu corazón brilla  
+sin pedir permiso al alma.`,
 
-  `Como Kitty,
-tu ternura parece pequeña,
-pero cabe en todo mi pecho.
-No haces ruido al llegar,
-solo te acomodas,
-y de pronto todo está bien.
-Hay amores que no se gritan,
-se ronronean cerca del corazón.`,
+  `Como Kitty,  
+tu ternura cabe en mi pecho,  
+y de pronto todo está bien,  
+cerca del corazón me echo.`,
 
-  `En tu mundo, el amor sí es magia.
-Como en My Little Pony,
-la amistad se vuelve promesa
-y el cariño, refugio.
-Tú no cambias el mundo con fuerza,
-lo haces con luz,
-y sin darte cuenta,
-te conviertes en el lugar
-donde siempre quiero volver.`,
+  `En tu mundo, el amor es magia,  
+la amistad es promesa y alegría,  
+y tú te vuelves mi refugio,  
+el lugar donde siempre quería.`,
 
-  `Si tú dices “vas con la otra”,
-yo sonrío y no me importa.
-Porque yo estaré con la otra,pero
-la otra forma de quererte
-que siempre te reconforta.
-No es celos ni dramas,
-es solo que me encanta
-ver tu risa, tu mirada,
-y quedarme cerca
-de tu ternura que me encanta..`,
+  `Si dices “vas con la otra”,  
+yo sonrío y no me agota,  
+porque yo estaré con la otra forma  
+de quererte que siempre reconforta.`,
 
-  `Batman no lucha solo por la ciudad,
-lo hace porque sabe que ella da paz.
-Gatúbela no teme a la oscuridad,
-la vuelve dulce, la vuelve hogar de verdad.
-Juntos no buscan salvar la nación,
-se buscan en secreto, en cada rincón.
-Así te pienso, sin miedo ni prisa,
-como quien halla amor en la noche que brilla.`,
+  `Batman no lucha solo,  
+lo hace porque ella da paz,  
+Gatúbela vuelve la oscuridad  
+un dulce hogar que siempre voy a estar.`,
 
-  `Eda suena a primavera,
-a verdad sin condena.
-Eda es luz que no espera,
-es razón que me ordena.
-Cuando digo tu nombre en voz baja,
-todo en mí se serena.`,
+  `Eda suena a primavera,  
+a verdad que me ordena,  
+luz que nunca espera,  
+y razón que me serena.`,
 
-
- `Eda,
-si supieras la manera
-en que tu risa me enreda,
-cómo tu mirada quiebra
-las murallas que me quedan.
-Eda,
-eres la pausa más bella
-en esta vida que acelera.`
+  `Eda,  
+tu risa me enreda,  
+tu mirada rompe murallas,  
+eres la pausa más queda.`
 ];
 
-// Claves en localStorage
+// ========== CLAVES LOCALSTORAGE ==========
 const KEY_DATE = "poema_del_dia_fecha_v2";
 const KEY_POEM = "poema_del_dia_texto_v2";
 
-// ========== FUNCIONES ==========
+const KEY_DATE_IMG = "imagen_del_dia_fecha";
+const KEY_IMG = "imagen_del_dia_src";
 
+// ========== FUNCIONES FECHA ==========
 function getToday() {
   const now = new Date();
   const y = now.getFullYear();
@@ -83,23 +52,59 @@ function getToday() {
   return `${y}-${m}-${d}`;
 }
 
+function getDayOfYear() {
+  const now = new Date();
+  const start = new Date(now.getFullYear(), 0, 0);
+  const diff = now - start;
+  const oneDay = 1000 * 60 * 60 * 24;
+  return Math.floor(diff / oneDay);
+}
+
+// ========== FUNCIONES POEMA ==========
 function obtenerPoemaDelDia() {
   const hoy = getToday();
   const fechaGuardada = localStorage.getItem(KEY_DATE);
   const poemaGuardado = localStorage.getItem(KEY_POEM);
 
+  if (fechaGuardada === hoy && poemaGuardado) {
+    return poemaGuardado;
+  }
 
-  // Si es día nuevo, elegir poema random
-  const poemaRandom = poemas[Math.floor(Math.random() * poemas.length)];
-  
+  const diaDelAno = getDayOfYear();
+  const indice = diaDelAno % poemas.length;
+  const poemaDelDia = poemas[indice];
+
   localStorage.setItem(KEY_DATE, hoy);
-  localStorage.setItem(KEY_POEM, poemaRandom);
-  
-  return poemaRandom;
+  localStorage.setItem(KEY_POEM, poemaDelDia);
+
+  return poemaDelDia;
+}
+
+// ========== IMÁGENES ==========
+const imagenes = [
+  "img/batman.png",
+  "img/k.png",
+  "img/luna.png",
+  "img/mlp.png"
+];
+
+function obtenerImagenDelDia() {
+  const hoy = getToday();
+  const fechaGuardada = localStorage.getItem(KEY_DATE_IMG);
+  const imgGuardada = localStorage.getItem(KEY_IMG);
+
+  if (fechaGuardada === hoy && imgGuardada) {
+    return imgGuardada;
+  }
+
+  const imgRandom = imagenes[Math.floor(Math.random() * imagenes.length)];
+  localStorage.setItem(KEY_DATE_IMG, hoy);
+  localStorage.setItem(KEY_IMG, imgRandom);
+
+  return imgRandom;
 }
 
 // ========== CÓDIGO PRINCIPAL ==========
-
 document.addEventListener("DOMContentLoaded", function() {
   const flap = document.getElementById("flap");
   const letter = document.getElementById("letter");
@@ -122,6 +127,12 @@ document.addEventListener("DOMContentLoaded", function() {
   if (poemaEl) poemaEl.textContent = poemaDelDia;
   if (notaEl) notaEl.textContent = "vuelva mañana <3";
 
+  // Cargar imagen del día
+  if (imagenEl) {
+    const imagenDelDia = obtenerImagenDelDia();
+    imagenEl.src = imagenDelDia;
+  }
+
   // Abrir carta al hacer click
   openBtn.addEventListener("click", () => {
     if (!isOpen) {
@@ -132,8 +143,10 @@ document.addEventListener("DOMContentLoaded", function() {
       if (titleEl) titleEl.classList.add("hidden");
       isOpen = true;
 
-      // Reproducir música (si existe)
-      reproducirMusica();
+      // Reproducir música
+      if (musica) {
+        reproducirMusica();
+      }
     }
   });
 
@@ -150,21 +163,19 @@ document.addEventListener("DOMContentLoaded", function() {
       // Detener música
       if (musica) {
         musica.pause();
-        musica.currentTime = 0; // reinicia al inicio
+        musica.currentTime = 0;
         console.log("⏹️ Música detenida");
       }
     }
   });
 
   // Función para reproducir música
-  const reproducirMusica = async () => {
+  async function reproducirMusica() {
     if (!musica) return;
-    
     if (musica.readyState === 0) {
       console.log("No se encontró archivo de música");
       return;
     }
-    
     musica.volume = 0.4;
     try {
       await musica.play();
@@ -172,41 +183,5 @@ document.addEventListener("DOMContentLoaded", function() {
     } catch (err) {
       console.log("ℹ️ Música no disponible:", err.message);
     }
-  };
-});
-
-// ========== IMÁGENES ==========
-
-const imagenes = [
-  "img/batman.png",
-  "img/k.png",
-  "img/luna.png",
-  "img/mlp.png"
-];
-
-// Claves en localStorage
-const KEY_DATE_IMG = "imagen_del_dia_fecha";
-const KEY_IMG = "imagen_del_dia_src";
-
-function obtenerImagenDelDia() {
-  const hoy = getToday();
-  const fechaGuardada = localStorage.getItem(KEY_DATE_IMG);
-  const imgGuardada = localStorage.getItem(KEY_IMG);
-
-  if (fechaGuardada === hoy && imgGuardada) {
-    return imgGuardada;
   }
-
-  // Si es día nuevo, elegir imagen random
-  const imgRandom = imagenes[Math.floor(Math.random() * imagenes.length)];
-  
-  localStorage.setItem(KEY_DATE_IMG, hoy);
-  localStorage.setItem(KEY_IMG, imgRandom);
-  
-  return imgRandom;
-}
-document.addEventListener("DOMContentLoaded", function() {
-  const imagenEl = document.getElementById("imagenDia");
-  const imagenDelDia = obtenerImagenDelDia();
-  if (imagenEl) imagenEl.src = imagenDelDia;
 });

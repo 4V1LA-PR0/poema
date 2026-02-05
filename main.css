@@ -25,6 +25,7 @@ body {
   text-align: center;
   width: 100%;
   max-width: 600px;
+  padding-bottom: 120px; /* espacio para botones debajo de la carta */
 }
 
 .title {
@@ -107,6 +108,7 @@ body {
   opacity: 1;
   z-index: 10;
   transition: transform 0.8s ease, height 0.8s ease, opacity 0.3s ease, z-index 0s;
+  overflow-y: auto; /* permite scroll si el contenido es grande */
 }
 
 .letter h2 {
@@ -161,22 +163,22 @@ body {
   opacity: 1;
 }
 
+/* ========== IMÁGENES ========== */
 .poema-img {
-  max-width: 120px;
+  max-width: 80px;       /* tamaño máximo */
   height: auto;
-  display: block;
-  margin: 10px auto;
-  border-radius: 8px;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+  display: inline-block;
+  margin: 0 auto;
+  border-radius: 0;      /* sin esquinas redondeadas */
+  box-shadow: none;      /* sin sombra */
   opacity: 0;
   transition: opacity 0.5s ease 0.6s;
+  vertical-align: middle;
 }
 
 .letter.open .poema-img {
   opacity: 1;
 }
-
-
 
 /* Solapa frontal inferior */
 .envelope-front {
@@ -192,21 +194,24 @@ body {
   filter: drop-shadow(0 -2px 5px rgba(0, 0, 0, 0.2));
 }
 
-/* Botón */
-.btn-open {
+/* Botones */
+.btn-open, .btn-close {
   margin-top: 30px;
   padding: 18px 50px;
   font-size: 1.3em;
   font-weight: bold;
-  background: white;
-  color: #ff6b9d;
-  border: 3px solid #ff6b9d;
   border-radius: 50px;
   cursor: pointer;
   transition: all 0.3s ease;
   text-transform: uppercase;
   letter-spacing: 2px;
   box-shadow: 0 4px 15px rgba(255, 107, 157, 0.3);
+}
+
+.btn-open {
+  background: white;
+  color: #ff6b9d;
+  border: 3px solid #ff6b9d;
 }
 
 .btn-open:hover {
@@ -220,53 +225,30 @@ body {
   transform: scale(0.95);
 }
 
-.btn-open.hidden {
-  opacity: 0;
-  pointer-events: none;
-}
-
 .btn-close {
-  margin-top: 30px;
-  padding: 18px 50px;
-  font-size: 1.3em;
-  font-weight: bold;
   background: #ff6b9d;
   color: white;
   border: none;
-  border-radius: 50px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  text-transform: uppercase;
-  letter-spacing: 2px;
-  box-shadow: 0 4px 15px rgba(255, 107, 157, 0.3);
 }
+
 .btn-close:hover {
   background: white;
   color: #ff6b9d;
   transform: scale(1.05);
   box-shadow: 0 6px 20px rgba(255, 107, 157, 0.5);
 }
+
 .btn-close:active {
   transform: scale(0.95);
 }
 
-.btn-close.hidden {
+.btn-open.hidden, .btn-close.hidden {
   opacity: 0;
   pointer-events: none;
+  display: none;
 }
-
-.hidden {
-  opacity: 0;
-  pointer-events: none;
-  display: none; /* esto sí lo elimina del flujo */
-}
-
-
-
-
 
 /* ========== RESPONSIVE ========== */
-
 @media (max-width: 480px) {
   .title {
     font-size: 1.8em;
@@ -288,13 +270,14 @@ body {
     top: 80px;
     max-width: 280px;
     padding: 20px 15px;
-    max-height: 0;
+    max-height: 70vh; /* carta ocupa máximo 70% de pantalla */
+    overflow-y: auto;  /* scroll si es necesario */
   }
 
   .letter.open {
     transform: translateX(-50%) translateY(-140px);
     padding: 25px 20px;
-    max-height: 500px;
+    max-height: 70vh;
   }
 
   .letter h2 {
@@ -311,7 +294,7 @@ body {
     border-bottom: 115px solid #a79b9f;
   }
 
-  .btn-open {
+  .btn-open, .btn-close {
     padding: 15px 40px;
     font-size: 1.1em;
   }
