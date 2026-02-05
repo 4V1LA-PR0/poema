@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Eda</title>
+  <link rel="stylesheet" href="main.css">
+</head>
+<body>
+
+  <div class="container">
+    <h1 class="title">Para usted🍄</h1>
+    
+    <div class="envelope-wrapper" id="envelopeWrapper">
+      <div class="envelope">
+        <!-- Solapa superior que se abre -->
+        <div class="flap" id="flap"></div>
+        
+        <!-- Carta con el poema -->
+        <div class="letter" id="letter">
+          <h2>🌙 Poema del Día</h2>
+
+          <img id="imagenDia" class="poema-img" alt="Imagen del día">
+          <div class="poema" id="poema"></div>
+          <div class="nota" id="nota"></div>
+          <div class="fecha" id="fecha"></div>
+        </div>
+        
+        <!-- Solapa frontal inferior -->
+        <div class="envelope-front"></div>
+      </div>
+      
+      <button id="openBtn" class="btn-open">ABRIR CARTA</button>
+      <button id="closeBtn" class="btn-close">CERRAR CARTA</button>
+    </div>
+  </div>
+  
+
+  <audio id="musica" loop>
+    <source src="musica.mp3" type="audio/mpeg">
+  </audio>
+
+  <script src="main.js"></script>
+</body>
+</html>
