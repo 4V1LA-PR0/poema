@@ -15,7 +15,7 @@ la amistad es promesa y alegría,
 y tú te vuelves mi refugio,  
 el lugar donde siempre quería.`,
 
-  `Si dices “vas con la otra”,  
+  `Si dices "vas con la otra",  
 yo sonrío y no me agota,  
 porque yo estaré con la otra forma  
 de quererte que siempre reconforta.`,
@@ -122,7 +122,7 @@ document.addEventListener("DOMContentLoaded", function() {
   // Cargar poema del día
   const poemaDelDia = obtenerPoemaDelDia();
   const hoy = getToday();
-  
+
   if (fechaEl) fechaEl.textContent = ` ${hoy}`;
   if (poemaEl) poemaEl.textContent = poemaDelDia;
   if (notaEl) notaEl.textContent = "vuelva mañana <3";
@@ -131,6 +131,22 @@ document.addEventListener("DOMContentLoaded", function() {
   if (imagenEl) {
     const imagenDelDia = obtenerImagenDelDia();
     imagenEl.src = imagenDelDia;
+  }
+
+  // Función para reproducir música
+  async function reproducirMusica() {
+    if (!musica) return;
+    if (musica.readyState === 0) {
+      console.log("No se encontró archivo de música");
+      return;
+    }
+    musica.volume = 0.4;
+    try {
+      await musica.play();
+      console.log("✅ Música iniciada");
+    } catch (err) {
+      console.log("ℹ️ Música no disponible:", err.message);
+    }
   }
 
   // Abrir carta al hacer click
@@ -143,14 +159,25 @@ document.addEventListener("DOMContentLoaded", function() {
       if (titleEl) titleEl.classList.add("hidden");
       isOpen = true;
 
-      // Reproducir música
-      if (musica) {
-        reproducirMusica();
+      // 🦇 MOSTRAR MURCIÉLAGO
+      const batContainer = document.getElementById("batContainer");
+      if (batContainer) {
+        batContainer.classList.remove("hidden");
+        batContainer.classList.add("show");
+        
+        // Ocultar después de la animación
+        setTimeout(() => {
+          batContainer.classList.remove("show");
+          batContainer.classList.add("hidden");
+        }, 2000);
       }
+
+      // Reproducir música
+      reproducirMusica();
     }
   });
 
-  // Cerrar carta al hacer click
+  // Cerrar carta al hacer click en el botón
   closeBtn.addEventListener("click", () => {
     if (isOpen) {
       flap.classList.remove("open");
@@ -169,19 +196,22 @@ document.addEventListener("DOMContentLoaded", function() {
     }
   });
 
-  // Función para reproducir música
-  async function reproducirMusica() {
-    if (!musica) return;
-    if (musica.readyState === 0) {
-      console.log("No se encontró archivo de música");
-      return;
+  // Cerrar carta al hacer clic sobre ella
+  letter.addEventListener("click", () => {
+    if (isOpen) {
+      flap.classList.remove("open");
+      letter.classList.remove("open");
+      openBtn.classList.remove("hidden");
+      closeBtn.classList.add("hidden");
+      if (titleEl) titleEl.classList.remove("hidden");
+      isOpen = false;
+
+      // Detener música
+      if (musica) {
+        musica.pause();
+        musica.currentTime = 0;
+        console.log("⏹️ Música detenida al cerrar carta");
+      }
     }
-    musica.volume = 0.4;
-    try {
-      await musica.play();
-      console.log("✅ Música iniciada");
-    } catch (err) {
-      console.log("ℹ️ Música no disponible:", err.message);
-    }
-  }
+  });
 });

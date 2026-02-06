@@ -7,7 +7,7 @@
 body {
   font-family: 'Arial', sans-serif;
   background: linear-gradient(135deg, #0b1b3a, #071022);
-  background-image: url("https://res.cloudinary.com/dhpq4rjad/image/upload/v1769411549/kitty_xq1sn0.jpg");
+  background-image: url("https://res.cloudinary.com/dhpq4rjad/image/upload/v1770362141/Hello_Kitty_fxbobo.jpg");
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -69,7 +69,7 @@ body {
   height: 0;
   border-left: 200px solid transparent;
   border-right: 200px solid transparent;
-  border-top: 140px solid #f6145fc0;
+  border-top: 140px solid #d32f66c0;
   transform-origin: top center;
   transition: transform 0.8s ease;
   z-index: 5;
@@ -113,7 +113,7 @@ body {
 
 .letter h2 {
   font-size: 1.8em;
-  color: #6b2039;
+  color: #b67b8e;
   margin-bottom: 10px;
   opacity: 0;
   transition: opacity 0.5s ease 0.3s;
@@ -152,7 +152,7 @@ body {
 
 .nota {
   font-size: 0.85em;
-  color: #cf6d8e;
+  color: #a33459;
   margin-top: 15px;
   font-style: italic;
   opacity: 0;
@@ -189,7 +189,7 @@ body {
   height: 0;
   border-left: 200px solid transparent;
   border-right: 200px solid transparent;
-  border-bottom: 140px solid #d36187;
+  border-bottom: 140px solid #ff6196;
   z-index: 4;
   filter: drop-shadow(0 -2px 5px rgba(0, 0, 0, 0.2));
 }
@@ -309,7 +309,7 @@ body {
   .flap {
     border-left: 140px solid transparent;
     border-right: 140px solid transparent;
-    border-top: 100px solid #af2755;
+    border-top: 100px solid #ff397b;
   }
 
   .letter {
@@ -320,5 +320,50 @@ body {
     border-left: 140px solid transparent;
     border-right: 140px solid transparent;
     border-bottom: 100px solid #af2150;
+  }
+}
+
+/* ========== MURCIÉLAGO BATMAN ========== */
+.bat-container {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 999;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+.bat-container.show {
+  opacity: 1;
+  animation: batFly 2s ease-out forwards;
+}
+
+.bat {
+  font-size: 80px;
+  filter: drop-shadow(0 0 20px rgba(0, 0, 0, 0.8));
+  animation: batWings 0.3s infinite alternate;
+}
+
+@keyframes batFly {
+  0% {
+    transform: translate(-50%, -50%) scale(0) rotate(0deg);
+  }
+  50% {
+    transform: translate(-50%, -50%) scale(1.5) rotate(360deg);
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(0.8) rotate(720deg);
+    opacity: 0;
+  }
+}
+
+@keyframes batWings {
+  0% {
+    transform: scaleX(1);
+  }
+  100% {
+    transform: scaleX(1.1);
   }
 }
