@@ -195,6 +195,7 @@ body {
 }
 
 /* Botones */
+/* Botones */
 .btn-open, .btn-close {
   margin-top: 30px;
   padding: 18px 50px;
@@ -206,6 +207,11 @@ body {
   text-transform: uppercase;
   letter-spacing: 2px;
   box-shadow: 0 4px 15px rgba(255, 107, 157, 0.3);
+  position: relative;
+  z-index: 100; /* ⭐ AGREGAR ESTO */
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+  user-select: none;
 }
 
 .btn-open {
@@ -247,7 +253,6 @@ body {
   pointer-events: none;
   display: none;
 }
-
 /* ========== RESPONSIVE ========== */
 @media (max-width: 480px) {
   .title {

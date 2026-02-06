@@ -23,7 +23,7 @@ de quererte que siempre reconforta.`,
   `Batman no lucha solo,  
 lo hace porque ella da paz,  
 Gatúbela vuelve la oscuridad  
-un dulce hogar que siempre voy a estar.`,
+un dulce hogar donde siempre estás.`,
 
   `Eda suena a primavera,  
 a verdad que me ordena,  
@@ -39,28 +39,22 @@ eres la pausa más queda.`
 // ========== CLAVES LOCALSTORAGE ==========
 const KEY_DATE = "poema_del_dia_fecha_v2";
 const KEY_POEM = "poema_del_dia_texto_v2";
-
 const KEY_DATE_IMG = "imagen_del_dia_fecha";
 const KEY_IMG = "imagen_del_dia_src";
 
-// ========== FUNCIONES FECHA ==========
+// ========== FECHA ==========
 function getToday() {
   const now = new Date();
-  const y = now.getFullYear();
-  const m = String(now.getMonth() + 1).padStart(2, "0");
-  const d = String(now.getDate()).padStart(2, "0");
-  return `${y}-${m}-${d}`;
+  return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}-${String(now.getDate()).padStart(2, "0")}`;
 }
 
 function getDayOfYear() {
   const now = new Date();
   const start = new Date(now.getFullYear(), 0, 0);
-  const diff = now - start;
-  const oneDay = 1000 * 60 * 60 * 24;
-  return Math.floor(diff / oneDay);
+  return Math.floor((now - start) / (1000 * 60 * 60 * 24));
 }
 
-// ========== FUNCIONES POEMA ==========
+// ========== POEMA DEL DÍA ==========
 function obtenerPoemaDelDia() {
   const hoy = getToday();
   const fechaGuardada = localStorage.getItem(KEY_DATE);
@@ -70,8 +64,7 @@ function obtenerPoemaDelDia() {
     return poemaGuardado;
   }
 
-  const diaDelAno = getDayOfYear();
-  const indice = diaDelAno % poemas.length;
+  const indice = getDayOfYear() % poemas.length;
   const poemaDelDia = poemas[indice];
 
   localStorage.setItem(KEY_DATE, hoy);
@@ -104,114 +97,87 @@ function obtenerImagenDelDia() {
   return imgRandom;
 }
 
-// ========== CÓDIGO PRINCIPAL ==========
-document.addEventListener("DOMContentLoaded", function() {
+// ========== PRINCIPAL ==========
+document.addEventListener("DOMContentLoaded", () => {
   const flap = document.getElementById("flap");
   const letter = document.getElementById("letter");
   const openBtn = document.getElementById("openBtn");
-  const closeBtn = document.getElementById("closeBtn");
   const fechaEl = document.getElementById("fecha");
   const poemaEl = document.getElementById("poema");
   const notaEl = document.getElementById("nota");
   const musica = document.getElementById("musica");
-  const titleEl = document.querySelector(".title"); 
+  const titleEl = document.querySelector(".title");
   const imagenEl = document.getElementById("imagenDia");
 
   let isOpen = false;
 
-  // Cargar poema del día
-  const poemaDelDia = obtenerPoemaDelDia();
-  const hoy = getToday();
+  // Cargar contenido
+  if (fechaEl) fechaEl.textContent = getToday();
+  if (poemaEl) poemaEl.textContent = obtenerPoemaDelDia();
+  if (notaEl) notaEl.textContent = "vuelve mañana <3";
+  if (imagenEl) imagenEl.src = obtenerImagenDelDia();
 
-  if (fechaEl) fechaEl.textContent = ` ${hoy}`;
-  if (poemaEl) poemaEl.textContent = poemaDelDia;
-  if (notaEl) notaEl.textContent = "vuelva mañana <3";
-
-  // Cargar imagen del día
-  if (imagenEl) {
-    const imagenDelDia = obtenerImagenDelDia();
-    imagenEl.src = imagenDelDia;
-  }
-
-  // Función para reproducir música
+  // Música
   async function reproducirMusica() {
     if (!musica) return;
-    if (musica.readyState === 0) {
-      console.log("No se encontró archivo de música");
-      return;
-    }
     musica.volume = 0.4;
     try {
       await musica.play();
-      console.log("✅ Música iniciada");
-    } catch (err) {
-      console.log("ℹ️ Música no disponible:", err.message);
+    } catch (e) {
+      console.log("🎵 Música bloqueada por el navegador");
     }
   }
 
-  // Abrir carta al hacer click
-  openBtn.addEventListener("click", () => {
-    if (!isOpen) {
-      flap.classList.add("open");
-      letter.classList.add("open");
-      openBtn.classList.add("hidden");
-      closeBtn.classList.remove("hidden");
-      if (titleEl) titleEl.classList.add("hidden");
-      isOpen = true;
+  function detenerMusica() {
+    if (!musica) return;
+    musica.pause();
+    musica.currentTime = 0;
+  }
 
-      // 🦇 MOSTRAR MURCIÉLAGO
-      const batContainer = document.getElementById("batContainer");
-      if (batContainer) {
-        batContainer.classList.remove("hidden");
-        batContainer.classList.add("show");
-        
-        // Ocultar después de la animación
-        setTimeout(() => {
-          batContainer.classList.remove("show");
-          batContainer.classList.add("hidden");
-        }, 2000);
-      }
+  // Abrir carta
+  function abrirCarta(e) {
+    e.preventDefault();
+    e.stopPropagation();
 
-      // Reproducir música
-      reproducirMusica();
+    if (isOpen) return;
+
+    flap.classList.add("open");
+    letter.classList.add("open");
+    openBtn.classList.add("hidden");
+    if (titleEl) titleEl.classList.add("hidden");
+
+    isOpen = true;
+    reproducirMusica();
+
+    const batContainer = document.getElementById("batContainer");
+    if (batContainer) {
+      batContainer.classList.remove("hidden");
+      batContainer.classList.add("show");
+
+      setTimeout(() => {
+        batContainer.classList.remove("show");
+        batContainer.classList.add("hidden");
+      }, 2000);
     }
-  });
+  }
 
-  // Cerrar carta al hacer click en el botón
-  closeBtn.addEventListener("click", () => {
-    if (isOpen) {
-      flap.classList.remove("open");
-      letter.classList.remove("open");
-      openBtn.classList.remove("hidden");
-      closeBtn.classList.add("hidden");
-      if (titleEl) titleEl.classList.remove("hidden");
-      isOpen = false;
+  // Cerrar carta
+  function cerrarCarta(e) {
+    e.preventDefault();
+    e.stopPropagation();
 
-      // Detener música
-      if (musica) {
-        musica.pause();
-        musica.currentTime = 0;
-        console.log("⏹️ Música detenida");
-      }
-    }
-  });
+    if (!isOpen) return;
 
-  // Cerrar carta al hacer clic sobre ella
-  letter.addEventListener("click", () => {
-    if (isOpen) {
-      flap.classList.remove("open");
-      letter.classList.remove("open");
-      openBtn.classList.remove("hidden");
-      closeBtn.classList.add("hidden");
-      if (titleEl) titleEl.classList.remove("hidden");
-      isOpen = false;
+    flap.classList.remove("open");
+    letter.classList.remove("open");
+    openBtn.classList.remove("hidden");
+    if (titleEl) titleEl.classList.remove("hidden");
 
-      // Detener música
-      if (musica) {
-        musica.pause();
-        musica.currentTime = 0;
-        console.log("⏹️ Música detenida al cerrar carta");
-      }
-    }
-  });
+    detenerMusica();
+    isOpen = false;
+  }
+
+  // Eventos (SOLO CLICK)
+  if (openBtn) openBtn.addEventListener("click", abrirCarta);
+  if (letter) letter.addEventListener("click", cerrarCarta);
 });
